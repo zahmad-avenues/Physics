@@ -1,8 +1,4 @@
 let b;
-let c;
-let redVal;
-let vel;
-let pos;
 let grav;
 
 function setup() {
@@ -14,14 +10,14 @@ function setup() {
 
 function draw() {
   background(220);
-  b.update();    
+  b.update();
 }
 
-// a blueprint for creating circles that move around the screen
 class Bouncer {
   constructor(x, y, r, redVal, velX, velY) {
     this.pos = createVector(x, y);
     this.vel = createVector(velX, velY);
+    this.acc = createVector(0, 0); // acceleration
     this.r = r;
     this.redVal = redVal;
     this.c = color(redVal, 200, 200);
@@ -39,16 +35,14 @@ class Bouncer {
   }
 
   applyForce(force) {
-    this.vel.add(force);
-  }
-
-  applyVelocity() {
-    this.pos.add(this.vel);
+    this.acc.add(force);
   }
 
   update() {
-    this.applyForce(grav);
-    this.applyVelocity();
+    this.applyForce(grav);       // apply gravity as a force
+    this.vel.add(this.acc);      // velocity changes based on acceleration
+    this.pos.add(this.vel);      // position changes based on velocity
+    this.acc.mult(0);            // reset acceleration after applying it
     this.move();
     this.draw();
   }
