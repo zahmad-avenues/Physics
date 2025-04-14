@@ -1,11 +1,14 @@
-let G = 0.1
+
 let b 
 let c
 let redVal
-
+let vel
+let pos
+let grav
 function setup() {
   createCanvas(400, 400);
-  b = new Bouncer(100,100,10,0,0,0,10);
+  grav = createVector(0,1)
+  b = new Bouncer(100,100,10,0,5);
   
   ellipseMode(RADIUS)
 }
@@ -26,15 +29,14 @@ class Bouncer { // noun
   //   positional constraints
   //   size
   //   velocity
-  constructor(x,y,r,redVal,dx,dy,v) {
-    this.x = x
-    this.y = y
+  constructor(x,y,r,redVal,velX,velY) {
+   // this.x = x
+ //   this.y = y
+    this.pos = createVector(x,y)
+    this.vel = createVector(velX,velY)
     this.r = r
     this.redVal = redVal
     this.c = color(redVal,200,200)
-    this.dx = dx
-    this.dy = dy
-    this.v = v
     this.minX = r
     this.maxX = width-r
     this.minY = r
@@ -51,11 +53,13 @@ class Bouncer { // noun
   }
   
   applyVelocity() {
-    this.dx += this.v
+   // this.dx += this.v
+    this.pos.add(this.vel)  
   }
   
   applyGravity() {
-    this.dy += G
+   // this.dy += G
+    this.vel.add(grav)
   }
   
   update() {
@@ -66,26 +70,27 @@ class Bouncer { // noun
   }
   
   move() {
-    this.x += this.dx
-    this.y += this.dy
-    if( this.x < this.minX ) {
-      this.x = this.minX
-      this.dx *= -1
+   // this.x += this.dx
+  //  this.y += this.dy
+    this.pos.add(this.vel)
+    if( this.pos.x < this.minX ) {
+      this.pos.x = this.minX
+      this.vel.x *= -1
       this.changeColor()
     }
-    if( this.x > this.maxX ) {
-      this.x = this.maxX
-      this.dx *= -1
+    if( this.pos.x > this.maxX ) {
+      this.pos.x = this.maxX
+      this.vel.x *= -1
       this.changeColor()
     }    
-    if( this.y < this.minY ) {
-      this.y = this.minY
-      this.dy *= -1
+    if( this.pos.y < this.minY ) {
+      this.pos.y = this.minY
+      this.vel.y *= -1
       this.changeColor()
     }    
-    if( this.y > this.maxY ) {
-      this.y = this.maxY
-      this.dy *= -1
+    if( this.pos.y > this.maxY ) {
+      this.pos.y = this.maxY
+      this.vel.y *= -1
       this.changeColor()
     }       
   }
@@ -97,6 +102,6 @@ class Bouncer { // noun
   }
   draw() {
     fill(this.c)
-    circle(this.x,this.y,this.r)
+    circle(this.pos.x,this.pos.y,this.r)
   }
 }
