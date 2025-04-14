@@ -3,8 +3,8 @@ let grav;
 
 function setup() {
   createCanvas(400, 400);
-  grav = createVector(0, -0.2);
-  b = new Bouncer(100, 100, 10, 0, 20, 10);
+  grav = createVector(0, 1);
+  b = new Bouncer(100, 100, 10, 0, 3, 6, 3); // last arg is mass
   ellipseMode(RADIUS);
 }
 
@@ -14,10 +14,11 @@ function draw() {
 }
 
 class Bouncer {
-  constructor(x, y, r, redVal, velX, velY) {
+  constructor(x, y, r, redVal, velX, velY, mass) {
     this.pos = createVector(x, y);
     this.vel = createVector(velX, velY);
-    this.acc = createVector(0, 0); // acceleration
+    this.acc = createVector(0, 0);
+    this.mass = mass;
     this.r = r;
     this.redVal = redVal;
     this.c = color(redVal, 200, 200);
@@ -35,14 +36,15 @@ class Bouncer {
   }
 
   applyForce(force) {
-    this.acc.add(force);
+    let f = p5.Vector.div(force, this.mass); // F = ma → a = F/m
+    this.acc.add(f);
   }
 
   update() {
-    this.applyForce(grav);       // apply gravity as a force
-    this.vel.add(this.acc);      // velocity changes based on acceleration
-    this.pos.add(this.vel);      // position changes based on velocity
-    this.acc.mult(0);            // reset acceleration after applying it
+    this.applyForce(grav);       
+    this.vel.add(this.acc);      
+    this.pos.add(this.vel);      
+    this.acc.mult(0);            
     this.move();
     this.draw();
   }
@@ -78,6 +80,6 @@ class Bouncer {
 
   draw() {
     fill(this.c);
-    circle(this.pos.x, this.pos.y, this.r);
+    circle(this.pos.x, this.pos.y, this.r * this.mass); // mass affects size too, optionally
   }
 }
