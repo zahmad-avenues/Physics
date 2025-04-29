@@ -82,4 +82,22 @@ class Bouncer {
     fill(this.c);
     circle(this.pos.x, this.pos.y, this.r * this.mass); // mass affects size too, optionally
   }
+  
 }
+function keyPressed() {
+  let force = createVector(0, 0);
+  let forceAmount = 0.5;
+
+  if (keyCode === LEFT_ARROW) {
+    force = createVector(-forceAmount, 10);
+  } else if (keyCode === RIGHT_ARROW) {
+    force = createVector(forceAmount, 10);
+  } else if (keyCode === UP_ARROW) {
+    force = createVector(10, -forceAmount * 2); // stronger upward push
+  } else if (keyCode === DOWN_ARROW) {
+    force = createVector(10, forceAmount);
+  }
+
+  b.applyForce(force);
+}
+
